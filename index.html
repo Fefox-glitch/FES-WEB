@@ -70,7 +70,7 @@
             <button type="submit" class="w-full bg-yellow-400 text-blue-900 font-bold py-2 rounded hover:bg-yellow-500 transition">Ingresar</button>
           </form>
           <p id="login-error" class="text-red-600 mt-2 hidden"></p>
-          <p class="mt-4 text-center">¿No tienes cuenta? <a href="register.html" class="text-yellow-400 hover:underline">Regístrate aquí</a></p>
+        <a href="registration.html" class="text-yellow-400 hover:underline">Regístrate aquí</a>
         </div>
       </div>
 
@@ -338,96 +338,6 @@
     </div>
   </footer>
 
-  <script>
-    const carouselInner = document.getElementById('carouselInner');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    let currentIndex = 0;
-    let products = [];
-    const itemsPerPage = 4;
-
-    function updateCarousel() {
-      const offset = -currentIndex * 100;
-      carouselInner.style.transform = `translateX(${offset}%)`;
-    }
-
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + Math.ceil(products.length / itemsPerPage)) % Math.ceil(products.length / itemsPerPage);
-      updateCarousel();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % Math.ceil(products.length / itemsPerPage);
-      updateCarousel();
-    });
-
-    async function fetchProducts() {
-      try {
-        const res = await fetch('/products');
-        if (!res.ok) throw new Error('Error fetching products');
-        products = await res.json();
-        renderProducts(products);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    function renderProducts(productsToRender) {
-      carouselInner.innerHTML = '';
-      productsToRender.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'min-w-[25%] p-2';
-        productCard.innerHTML = `
-          <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition">
-            <div class="h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-400">Imagen</div>
-            <h3 class="font-semibold text-lg text-blue-900 mb-2">${product.name}</h3>
-            <p class="text-yellow-500 font-bold mb-2">$${product.price.toFixed(2)}</p>
-            <button class="w-full bg-yellow-400 text-blue-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition" onclick="addToCart(${product.id})">
-              Comprar
-            </button>
-          </div>
-        `;
-        carouselInner.appendChild(productCard);
-      });
-    }
-
-    async function addToCart(productId) {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('Por favor, inicia sesión para agregar productos al carrito.');
-        return;
-      }
-      try {
-        const res = await fetch('/cart', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ product_id: productId, quantity: 1 })
-        });
-        if (res.ok) {
-          alert('Producto agregado al carrito');
-        } else {
-          const data = await res.json();
-          alert(data.message || 'Error al agregar al carrito');
-        }
-      } catch (error) {
-        alert('Error de conexión');
-      }
-    }
-
-    async function handleSearch() {
-      const query = searchInput.value.toLowerCase();
-      const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-      renderProducts(filtered);
-    }
-
-    searchInput.addEventListener('input', handleSearch);
-
-    // Initial load
-    fetchProducts();
-  </script>
 
   <script>
     const carouselInner = document.getElementById('carouselInner');
@@ -509,6 +419,6 @@
     }
 
     fetchProducts();
-  </script>
+  <script src="js/main.js"></script>
 </body>
 </html>
