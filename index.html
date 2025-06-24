@@ -45,6 +45,11 @@
         </div>
         <a href="ofertas.html" class="hover:text-yellow-500 transition font-bold">Ofertas</a>
         <a href="contacto.html" class="hover:text-yellow-500 transition">Contacto</a>
+        <a href="cart.html" class="ml-4 hover:text-yellow-500 transition font-semibold" title="Ver Carrito">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m4-9l2 9" />
+          </svg>
+        </a>
         <button id="loginBtn" class="ml-auto hover:text-yellow-500 transition font-semibold bg-transparent border-none cursor-pointer">Iniciar Sesión / Registrarse</button>
       </nav>
 
@@ -119,12 +124,17 @@
           }
         });
       </script>
-      <div>
+      <div class="flex items-center space-x-4">
         <input
           type="search"
           placeholder="Buscar productos..."
           class="border border-blue-900 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
         />
+        <a href="cart.html" title="Ver Carrito" class="hover:text-yellow-500 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m4-9l2 9" />
+          </svg>
+        </a>
       </div>
     </div>
   </header>
