@@ -5,12 +5,16 @@ import jwt
 import datetime
 from functools import wraps
 
+from security_middleware import register_security
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///usersystem.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+register_security(app)
 
 # Models
 class User(db.Model):
