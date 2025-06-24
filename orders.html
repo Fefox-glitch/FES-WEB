@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Historial de Pedidos - Farmacias El Sol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-white font-['Roboto'] text-gray-900">
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-900">Farmacias El Sol</div>
+      <nav class="space-x-6 text-blue-900 font-semibold">
+        <a href="index.html" class="hover:text-yellow-500 transition">Inicio</a>
+        <a href="orders.html" class="hover:text-yellow-500 transition font-bold">Pedidos</a>
+        <a href="cart.html" class="hover:text-yellow-500 transition">Carrito</a>
+        <a href="checkout.html" class="hover:text-yellow-500 transition">Checkout</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto py-12 px-4 max-w-4xl">
+    <h1 class="text-4xl font-bold text-blue-900 mb-6">Historial de Pedidos</h1>
+    <div id="orders-container" class="space-y-6">
+      <!-- Orders will be loaded here -->
+    </div>
+  </main>
+
+  <script>
+    function getToken() {
+      return localStorage.getItem('token');
+    }
+
+    async function fetchOrders() {
+      const token = getToken();
+      if (!token) {
+        alert('Por favor, inicia sesión para ver tus pedidos.');
+        window.location.href = 'index.html';
+        return;
+      }
+      try {
+        const res = await fetch('/orders', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (!res.ok) throw new Error('Error fetching orders');
+        const orders = await res.json();
+        const container = document.getElementById('orders-container');
+        container.innerHTML = '';
+        if (orders.length === 0) {
+          container.innerHTML = '<p class="text-gray-700">No tienes pedidos realizados.</p>';
+          return;
+        }
+        orders.forEach(order => {
+          const orderDiv = document.createElement('div');
+          orderDiv.className = 'border rounded-lg p-4 shadow';
+          let itemsHtml = '';
+          order.items.forEach(item => {
+            itemsHtml += `<li>${item.name} x${item.quantity} - $${item.price.toFixed(2)}</li>`;
+          });
+          orderDiv.innerHTML = `
+            <h2 class="text-2xl font-semibold text-blue-900 mb-2">Pedido #${order.order_id}</h2>
+            <p>Fecha: ${new Date(order.created_at).toLocaleString()}</p>
+            <p>Estado: ${order.status}</p>
+            <p>Total: $${order.total_amount.toFixed(2)}</p>
+            <ul class="list-disc list-inside mt-2">${itemsHtml}</ul>
+          `;
+          container.appendChild(orderDiv);
+        });
+      } catch (error) {
+        alert('Error al cargar los pedidos.');
+        console.error(error);
+      }
+    }
+
+    fetchOrders();
+  </script>
+</body>
+</html>
