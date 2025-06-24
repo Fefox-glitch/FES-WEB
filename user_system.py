@@ -190,6 +190,79 @@ def remove_from_cart(current_user, product_id):
 
 import os
 
+# New Models for Orders
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    status = db.Column(db.String(50), default='pending')  # pending, completed, cancelled
+    total_amount = db.Column(db.Float, nullable=False)
+    order_items = db.relationship('OrderItem', backref='order', lazy=True)
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+    price = db.Column(db.Float, nullable=False)
+    product = db.relationship('Product')
+
+# API to create order from cart
+@app.route('/orders', methods=['POST'])
+@token_required
+def create_order(current_user):
+    cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
+    if not cart_items:
+        return jsonify({'message': 'Cart is empty'}), 400
+
+    total_amount = 0
+    for item in cart_items:
+        total_amount += item.product.price * item.quantity
+
+    order = Order(user_id=current_user.id, total_amount=total_amount)
+    db.session.add(order)
+    db.session.flush()  # to get order.id
+
+    for item in cart_items:
+        order_item = OrderItem(
+            order_id=order.id,
+            product_id=item.product_id,
+            quantity=item.quantity,
+            price=item.product.price
+        )
+        db.session.add(order_item)
+
+    # Clear cart after order creation
+    for item in cart_items:
+        db.session.delete(item)
+
+    db.session.commit()
+    return jsonify({'message': 'Order created', 'order_id': order.id})
+
+# API to get user's orders
+@app.route('/orders', methods=['GET'])
+@token_required
+def get_orders(current_user):
+    orders = Order.query.filter_by(user_id=current_user.id).all()
+    output = []
+    for order in orders:
+        items = []
+        for item in order.order_items:
+            items.append({
+                'product_id': item.product_id,
+                'name': item.product.name,
+                'quantity': item.quantity,
+                'price': item.price
+            })
+        output.append({
+            'order_id': order.id,
+            'created_at': order.created_at.isoformat(),
+            'status': order.status,
+            'total_amount': order.total_amount,
+            'items': items
+        })
+    return jsonify(output)
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
