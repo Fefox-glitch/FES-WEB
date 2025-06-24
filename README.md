@@ -10,36 +10,59 @@ This repository contains a frontend clone of the Farmacias El Sol website, creat
 - Individual pages for each product category displaying relevant products
 - Consistent white, yellow, and blue color scheme
 - Easy to extend and customize
+- **User authentication and role-based access control (admin and user)**
+- **Product management by admin (CRUD operations)**
+- **User cart management with add/remove items**
+- **Order processing: users can create orders from their cart, view order history**
+- **Security middleware enforcing HTTPS and security headers**
 
 ## Project Structure
 
 - `index.html`: Main landing page
 - `dermocosmetica.html`, `medicamentos.html`, etc.: Individual category pages
+- Backend Python files:
+  - `user_system.py`: User authentication, product management, cart, and order processing APIs
+  - `discount_service.py`: Discount code application API
+  - `security_middleware.py`: Security headers and HTTPS enforcement middleware
 - All pages include navigation and footer for consistent user experience
+- `assets/`: Images and logos
 
 ## How to Run
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Fefox-glitch/FES-WEB.git
-   cd FES-WEB
-   ```
+### Frontend
 
-2. Serve the files using a simple HTTP server, for example:
-   ```bash
-   python3 -m http.server 8000
-   ```
+Serve the frontend files using a simple HTTP server, for example:
 
-3. Open your browser and navigate to:
-   ```
-   http://localhost:8000
-   ```
+```bash
+python3 -m http.server 8000
+```
+
+Open your browser and navigate to:
+
+```
+http://localhost:8000
+```
+
+The frontend includes additional pages for cart and checkout to support the complete purchase flow.
+
+### Backend
+
+Run the Flask backend services:
+
+```bash
+python3 user_system.py
+python3 discount_service.py
+```
+
+The backend provides APIs for user authentication, product management, cart, order processing, and discount application.
 
 ## Notes
 
-- This is a static frontend clone and does not include backend functionality.
+- This project includes both frontend and backend components.
 - Product images are placeholders and can be replaced with real images.
-- Feel free to customize and extend the project as needed.
+- The order processing feature allows users to create orders from their cart and view order history.
+- Security best practices are implemented via middleware.
+- This project is for demonstration purposes.
 
 ## License
 
