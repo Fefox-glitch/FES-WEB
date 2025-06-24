@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detalle del Producto - Farmacias El Sol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-white font-['Roboto'] text-gray-900">
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-900">Farmacias El Sol</div>
+      <nav class="space-x-6 text-blue-900 font-semibold">
+        <a href="index.html" class="hover:text-yellow-500 transition">Inicio</a>
+        <a href="cart.html" class="hover:text-yellow-500 transition">Carrito</a>
+        <a href="checkout.html" class="hover:text-yellow-500 transition">Checkout</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto py-12 px-4 max-w-lg">
+    <div id="product-detail" class="border rounded-lg p-6 shadow">
+      <div class="h-48 bg-gray-200 rounded mb-4 flex items-center justify-center text-gray-400">Imagen</div>
+      <h1 id="product-name" class="text-3xl font-bold text-blue-900 mb-2"></h1>
+      <p id="product-price" class="text-yellow-500 font-bold text-xl mb-4"></p>
+      <p id="product-description" class="text-gray-700 mb-6"></p>
+      <button id="addToCartBtn" class="bg-yellow-400 text-blue-900 font-bold px-6 py-2 rounded hover:bg-yellow-500 transition">Agregar al Carrito</button>
+    </div>
+  </main>
+
+  <script>
+    function getToken() {
+      return localStorage.getItem('token');
+    }
+
+    function getProductId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    async function fetchProduct() {
+      const productId = getProductId();
+      if (!productId) {
+        alert('ID de producto no especificado');
+        window.location.href = 'index.html';
+        return;
+      }
+      try {
+        const res = await fetch('/products');
+        if (!res.ok) throw new Error('Error fetching products');
+        const products = await res.json();
+        const product = products.find(p => p.id == productId);
+        if (!product) {
+          alert('Producto no encontrado');
+          window.location.href = 'index.html';
+          return;
+        }
+        document.getElementById('product-name').textContent = product.name;
+        document.getElementById('product-price').textContent = '$' + product.price.toFixed(2);
+        document.getElementById('product-description').textContent = product.description || 'Sin descripción disponible.';
+      } catch (error) {
+        console.error(error);
+        alert('Error al cargar el producto');
+        window.location.href = 'index.html';
+      }
+    }
+
+    async function addToCart() {
+      const token = getToken();
+      if (!token) {
+        alert('Por favor, inicia sesión para agregar productos al carrito.');
+        window.location.href = 'index.html';
+        return;
+      }
+      const productId = getProductId();
+      try {
+        const res = await fetch('/cart', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ product_id: productId, quantity: 1 })
+        });
+        if (res.ok) {
+          alert('Producto agregado al carrito');
+        } else {
+          const data = await res.json();
+          alert(data.message || 'Error al agregar al carrito');
+        }
+      } catch (error) {
+        alert('Error de conexión');
+      }
+    }
+
+    document.getElementById('addToCartBtn').addEventListener('click', addToCart);
+
+    fetchProduct();
+  </script>
+</body>
+</html>
