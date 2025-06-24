@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro - Farmacias El Sol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-white font-['Roboto'] text-gray-900">
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-900">Farmacias El Sol</div>
+      <nav class="space-x-6 text-blue-900 font-semibold">
+        <a href="index.html" class="hover:text-yellow-500 transition">Inicio</a>
+        <a href="registration.html" class="hover:text-yellow-500 transition font-bold">Registro</a>
+        <a href="cart.html" class="hover:text-yellow-500 transition">Carrito</a>
+        <a href="checkout.html" class="hover:text-yellow-500 transition">Checkout</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto py-12 px-4 max-w-md">
+    <h1 class="text-4xl font-bold text-blue-900 mb-6">Registro de Usuario</h1>
+    <form id="registration-form" class="space-y-6">
+      <div>
+        <label for="email" class="block font-semibold mb-1">Correo Electrónico</label>
+        <input type="email" id="email" name="email" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="password" class="block font-semibold mb-1">Contraseña</label>
+        <input type="password" id="password" name="password" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <button type="submit" class="w-full bg-yellow-400 text-blue-900 font-bold py-2 rounded hover:bg-yellow-500 transition">Registrarse</button>
+    </form>
+    <p id="message" class="mt-4 text-center text-red-600 hidden"></p>
+  </main>
+
+  <script>
+    const registrationForm = document.getElementById('registration-form');
+    const message = document.getElementById('message');
+
+    registrationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.classList.add('hidden');
+
+      const email = registrationForm.email.value;
+      const password = registrationForm.password.value;
+
+      try {
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email, password})
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert('Registro exitoso. Por favor, inicia sesión.');
+          window.location.href = 'index.html';
+        } else {
+          message.textContent = data.message || 'Error en el registro.';
+          message.classList.remove('hidden');
+        }
+      } catch (err) {
+        message.textContent = 'Error de conexión.';
+        message.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
