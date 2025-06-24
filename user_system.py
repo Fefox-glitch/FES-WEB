@@ -211,6 +211,9 @@ class OrderItem(db.Model):
 @app.route('/orders', methods=['POST'])
 @token_required
 def create_order(current_user):
+    import smtplib
+    from email.mime.text import MIMEText
+
     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
     if not cart_items:
         return jsonify({'message': 'Cart is empty'}), 400
@@ -237,6 +240,28 @@ def create_order(current_user):
         db.session.delete(item)
 
     db.session.commit()
+
+    # Send order confirmation email (simple SMTP example)
+    try:
+        sender = 'no-reply@farmaciaselsol.com'
+        receiver = current_user.email
+        subject = f'Confirmación de Pedido #{order.id}'
+        body = f'Hola {current_user.email},\n\nGracias por tu compra. Tu pedido #{order.id} ha sido recibido y está siendo procesado.\n\nTotal: ${total_amount:.2f}\n\nSaludos,\nFarmacias El Sol'
+
+        msg = MIMEText(body)
+        msg['Subject'] = subject
+        msg['From'] = sender
+        msg['To'] = receiver
+
+        # Configure your SMTP server here
+        smtp_server = 'localhost'
+        smtp_port = 25
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.sendmail(sender, [receiver], msg.as_string())
+    except Exception as e:
+        print(f'Error sending email: {e}')
+
     return jsonify({'message': 'Order created', 'order_id': order.id})
 
 # API to get user's orders
