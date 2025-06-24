@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Farmacias El Sol - Clone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Custom colors for yellow and blue */
+    :root {
+      --color-yellow: #FFD700;
+      --color-blue: #1E40AF;
+    }
+  </style>
+</head>
+<body class="bg-white font-['Roboto'] text-gray-900">
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-900">Farmacias El Sol</div>
+      <nav class="space-x-6 text-blue-900 font-semibold relative">
+        <a href="#" class="hover:text-yellow-500 transition">Inicio</a>
+        <div class="group inline-block relative">
+          <button class="hover:text-yellow-500 transition inline-flex items-center">
+            <span>Productos</span>
+            <svg class="ml-1 w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+              <path d="M5.516 7.548l4.484 4.484 4.484-4.484L15.484 9l-5.484 5.484L4.516 9z"/>
+            </svg>
+          </button>
+          <ul class="absolute hidden text-blue-900 pt-1 group-hover:block bg-white border border-gray-300 rounded shadow-lg w-48 z-10">
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/dermocosmetica.html">Dermocosmética</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/medicamentos.html">Medicamentos</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/vitaminas-y-suplementos.html">Vitaminas y Suplementos</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/anticonceptivos.html">Anticonceptivos</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/infantil-y-mama.html">Infantil y Mamá</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/cuidado-de-la-piel.html">Cuidado de la Piel</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/higiene-y-cuidado-personal.html">Higiene y Cuidado Personal</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/cuidado-capilar.html">Cuidado Capilar</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/belleza.html">Belleza</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/bienestar-sexual.html">Bienestar Sexual</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/veterinaria.html">Veterinaria</a></li>
+            <li><a class="block px-4 py-2 hover:bg-yellow-400 hover:text-white transition" href="/asesoria-online.html">Asesoria Online</a></li>
+          </ul>
+        </div>
+        <a href="#" class="hover:text-yellow-500 transition">Ofertas</a>
+        <a href="#" class="hover:text-yellow-500 transition">Contacto</a>
+      </nav>
+      <div>
+        <input
+          type="search"
+          placeholder="Buscar productos..."
+          class="border border-blue-900 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        />
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-blue-900 text-white py-16">
+    <div class="container mx-auto text-center px-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Bienvenido a Farmacias El Sol</h1>
+      <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
+        Tu salud y bienestar son nuestra prioridad en Farmacias El Sol. Descubre nuestras ofertas exclusivas y productos de calidad.
+      </p>
+      <a href="#" class="inline-block bg-yellow-400 text-blue-900 font-bold px-8 py-3 rounded-md hover:bg-yellow-500 transition">
+        Ver Ofertas
+      </a>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="container mx-auto py-12 px-4">
+    <h2 class="text-3xl font-bold text-blue-900 mb-8 text-center">Productos Destacados</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- Product Card -->
+      <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition">
+        <div class="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-400">Imagen</div>
+        <h3 class="font-semibold text-lg text-blue-900 mb-2">Producto 1</h3>
+        <p class="text-yellow-500 font-bold mb-2">$9,990</p>
+        <button class="w-full bg-yellow-400 text-blue-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition">
+          Comprar
+        </button>
+      </div>
+      <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition">
+        <div class="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-400">Imagen</div>
+        <h3 class="font-semibold text-lg text-blue-900 mb-2">Producto 2</h3>
+        <p class="text-yellow-500 font-bold mb-2">$14,990</p>
+        <button class="w-full bg-yellow-400 text-blue-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition">
+          Comprar
+        </button>
+      </div>
+      <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition">
+        <div class="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-400">Imagen</div>
+        <h3 class="font-semibold text-lg text-blue-900 mb-2">Producto 3</h3>
+        <p class="text-yellow-500 font-bold mb-2">$7,490</p>
+        <button class="w-full bg-yellow-400 text-blue-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition">
+          Comprar
+        </button>
+      </div>
+      <div class="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition">
+        <div class="h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-400">Imagen</div>
+        <h3 class="font-semibold text-lg text-blue-900 mb-2">Producto 4</h3>
+        <p class="text-yellow-500 font-bold mb-2">$12,990</p>
+        <button class="w-full bg-yellow-400 text-blue-900 font-semibold py-2 rounded-md hover:bg-yellow-500 transition">
+          Comprar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-900 text-white py-8 mt-12">
+    <div class="container mx-auto text-center">
+      <p>© 2024 Farmacias El Sol. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
