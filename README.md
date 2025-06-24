@@ -1,4 +1,4 @@
-# Farmacias El Sol - Frontend Clone
+# Farmacias El Sol
 
 This repository contains a frontend clone of the Farmacias El Sol website, created using HTML and Tailwind CSS. The project replicates the main landing page and individual product category pages with a modern, responsive design.
 
