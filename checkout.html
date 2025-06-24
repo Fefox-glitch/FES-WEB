@@ -43,11 +43,13 @@
       <button type="submit" class="w-full bg-yellow-400 text-blue-900 font-bold py-2 rounded hover:bg-yellow-500 transition">Confirmar Compra</button>
     </form>
     <p id="message" class="mt-4 text-center text-red-600 hidden"></p>
+    <p id="loading" class="mt-4 text-center text-blue-600 hidden">Procesando pago...</p>
   </main>
 
   <script>
     const checkoutForm = document.getElementById('checkout-form');
     const message = document.getElementById('message');
+    const loading = document.getElementById('loading');
 
     function getToken() {
       return localStorage.getItem('token');
@@ -56,6 +58,7 @@
     checkoutForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       message.classList.add('hidden');
+      loading.classList.remove('hidden');
       const token = getToken();
       if (!token) {
         alert('Por favor, inicia sesión para continuar.');
@@ -63,32 +66,36 @@
         return;
       }
 
-      // For demonstration, we just create the order from cart without real payment processing
-      try {
-        const res = await fetch('/orders', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: checkoutForm.name.value,
-            address: checkoutForm.address.value,
-            payment_method: checkoutForm.payment.value
-          })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert('Compra confirmada! ID de orden: ' + data.order_id);
-          window.location.href = 'index.html';
-        } else {
-          message.textContent = data.message || 'Error al procesar la compra.';
+      // Simulate payment processing delay
+      setTimeout(async () => {
+        try {
+          const res = await fetch('/orders', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              name: checkoutForm.name.value,
+              address: checkoutForm.address.value,
+              payment_method: checkoutForm.payment.value
+            })
+          });
+          const data = await res.json();
+          loading.classList.add('hidden');
+          if (res.ok) {
+            alert('Compra confirmada! ID de orden: ' + data.order_id);
+            window.location.href = 'index.html';
+          } else {
+            message.textContent = data.message || 'Error al procesar la compra.';
+            message.classList.remove('hidden');
+          }
+        } catch (err) {
+          loading.classList.add('hidden');
+          message.textContent = 'Error de conexión.';
           message.classList.remove('hidden');
         }
-      } catch (err) {
-        message.textContent = 'Error de conexión.';
-        message.classList.remove('hidden');
-      }
+      }, 2000); // 2 seconds delay to simulate payment
     });
   </script>
 </body>
