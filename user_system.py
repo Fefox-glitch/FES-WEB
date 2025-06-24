@@ -184,7 +184,24 @@ def remove_from_cart(current_user, product_id):
     db.session.commit()
     return jsonify({'message': 'Product removed from cart'})
 
+import os
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        # Create default admin user if not exists
+        admin_email = os.getenv('ADMIN_EMAIL') or "fernandotroncoso.ortiz@gmail.com"
+        admin_password = os.getenv('ADMIN_PASSWORD') or "192168death!"
+        if admin_email and admin_password:
+            admin_user = User.query.filter_by(email=admin_email).first()
+            if not admin_user:
+                admin_user = User(email=admin_email, role='admin')
+                admin_user.set_password(admin_password)
+                db.session.add(admin_user)
+                db.session.commit()
+                print(f"Default admin user created: {admin_email}")
+            else:
+                print(f"Admin user {admin_email} already exists.")
+        else:
+            print("Admin credentials not set in environment variables.")
     app.run(debug=True)

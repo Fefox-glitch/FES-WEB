@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel - Farmacias El Sol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 font-['Roboto'] text-gray-900">
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-blue-900 mb-6 text-center">Panel de Administración</h1>
+
+    <!-- Login Form -->
+    <section id="login-section" class="bg-white p-6 rounded shadow-md max-w-md mx-auto">
+      <h2 class="text-xl font-semibold mb-4">Iniciar Sesión</h2>
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label for="email" class="block font-semibold mb-1">Correo Electrónico</label>
+          <input type="email" id="email" name="email" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        </div>
+        <div>
+          <label for="password" class="block font-semibold mb-1">Contraseña</label>
+          <input type="password" id="password" name="password" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+        </div>
+        <button type="submit" class="w-full bg-yellow-400 text-blue-900 font-bold py-2 rounded hover:bg-yellow-500 transition">Ingresar</button>
+      </form>
+      <p id="login-error" class="text-red-600 mt-2 hidden"></p>
+    </section>
+
+    <!-- Admin Dashboard -->
+    <section id="admin-dashboard" class="hidden mt-10 bg-white p-6 rounded shadow-md">
+      <h2 class="text-2xl font-semibold mb-4">Gestión de Productos</h2>
+
+      <!-- Add Product -->
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2">Agregar Producto</h3>
+        <form id="add-product-form" class="space-y-4 max-w-md">
+          <div>
+            <label for="add-name" class="block font-semibold mb-1">Nombre</label>
+            <input type="text" id="add-name" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div>
+            <label for="add-price" class="block font-semibold mb-1">Precio</label>
+            <input type="number" id="add-price" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+          </div>
+          <div>
+            <label for="add-description" class="block font-semibold mb-1">Descripción</label>
+            <textarea id="add-description" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"></textarea>
+          </div>
+          <button type="submit" class="bg-yellow-400 text-blue-900 font-bold px-6 py-2 rounded hover:bg-yellow-500 transition">Agregar</button>
+          <p id="add-product-message" class="mt-2"></p>
+        </form>
+      </div>
+
+      <!-- Product List -->
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Productos Existentes</h3>
+        <div id="product-list" class="space-y-4 max-w-3xl overflow-auto max-h-96 border border-gray-300 rounded p-4 bg-gray-50"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const loginSection = document.getElementById('login-section');
+    const adminDashboard = document.getElementById('admin-dashboard');
+    const addProductForm = document.getElementById('add-product-form');
+    const addProductMessage = document.getElementById('add-product-message');
+    const productList = document.getElementById('product-list');
+
+    let authToken = '';
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.textContent = '';
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email, password})
+        });
+        const data = await res.json();
+        if (res.ok && data.role === 'admin') {
+          authToken = data.token;
+          loginSection.classList.add('hidden');
+          adminDashboard.classList.remove('hidden');
+          loadProducts();
+        } else {
+          loginError.textContent = data.message || 'Acceso denegado';
+          loginError.classList.remove('hidden');
+        }
+      } catch (err) {
+        loginError.textContent = 'Error de conexión';
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    addProductForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      addProductMessage.textContent = '';
+      const name = document.getElementById('add-name').value;
+      const price = parseFloat(document.getElementById('add-price').value);
+      const description = document.getElementById('add-description').value;
+
+      try {
+        const res = await fetch('/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+          },
+          body: JSON.stringify({name, price, description})
+        });
+        const data = await res.json();
+        if (res.ok) {
+          addProductMessage.textContent = 'Producto agregado exitosamente';
+          addProductForm.reset();
+          loadProducts();
+        } else {
+          addProductMessage.textContent = data.message || 'Error al agregar producto';
+        }
+      } catch (err) {
+        addProductMessage.textContent = 'Error de conexión';
+      }
+    });
+
+    async function loadProducts() {
+      productList.innerHTML = '';
+      try {
+        const res = await fetch('/products', {
+          headers: {
+            'Authorization': 'Bearer ' + authToken
+          }
+        });
+        const products = await res.json();
+        if (Array.isArray(products)) {
+          products.forEach(product => {
+            const div = document.createElement('div');
+            div.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
+            div.innerHTML = `
+              <div>
+                <h4 class="font-semibold text-blue-900">${product.name}</h4>
+                <p class="text-gray-700">$${product.price.toFixed(2)}</p>
+                <p class="text-gray-600 text-sm">${product.description || ''}</p>
+              </div>
+              <div>
+                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition" onclick="deleteProduct(${product.id})">Eliminar</button>
+              </div>
+            `;
+            productList.appendChild(div);
+          });
+        }
+      } catch (err) {
+        productList.innerHTML = '<p class="text-red-600">Error al cargar productos</p>';
+      }
+    }
+
+    async function deleteProduct(productId) {
+      if (!confirm('¿Está seguro de eliminar este producto?')) return;
+      try {
+        const res = await fetch('/products/' + productId, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + authToken
+          }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          loadProducts();
+        } else {
+          alert(data.message || 'Error al eliminar producto');
+        }
+      } catch (err) {
+        alert('Error de conexión');
+      }
+    }
+  </script>
+</body>
+</html>

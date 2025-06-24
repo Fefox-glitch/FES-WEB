@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto - Farmacias El Sol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-white font-['Roboto'] text-gray-900">
+  <header class="bg-white shadow-md">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-900">Farmacias El Sol</div>
+      <nav class="space-x-6 text-blue-900 font-semibold">
+        <a href="index.html" class="hover:text-yellow-500 transition">Inicio</a>
+        <a href="contacto.html" class="hover:text-yellow-500 transition font-bold">Contacto</a>
+        <a href="index.html#productos" class="hover:text-yellow-500 transition">Productos</a>
+        <a href="index.html#ofertas" class="hover:text-yellow-500 transition">Ofertas</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto py-12 px-4 max-w-3xl">
+    <h1 class="text-4xl font-bold text-blue-900 mb-6">Contacto</h1>
+    <p class="text-lg text-gray-700 mb-8">Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.</p>
+    <form class="space-y-6" action="#" method="POST">
+      <div>
+        <label for="name" class="block text-gray-700 font-semibold mb-2">Nombre</label>
+        <input type="text" id="name" name="name" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="email" class="block text-gray-700 font-semibold mb-2">Correo Electrónico</label>
+        <input type="email" id="email" name="email" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+      <div>
+        <label for="message" class="block text-gray-700 font-semibold mb-2">Mensaje</label>
+        <textarea id="message" name="message" rows="5" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"></textarea>
+      </div>
+      <button type="submit" class="bg-yellow-400 text-blue-900 font-bold px-6 py-3 rounded-md hover:bg-yellow-500 transition">Enviar</button>
+    </form>
+    <section class="mt-12">
+      <h2 class="text-2xl font-semibold text-blue-900 mb-4">Información de Contacto</h2>
+      <p class="text-gray-700 mb-2">Casa Matriz: Calle Luz Pereira 2020, Lontue, Molina</p>
+      <p class="text-gray-700 mb-2">Horario: Lunes a Sábado: 9:00 a 22:00</p>
+      <p class="text-gray-700 mb-2">Sucursal: Valdivia Nº157 Sagrada Familia, Sagrada Familia</p>
+      <p class="text-gray-700 mb-2">Horario: Lunes a Sábado: 9:00 a 19:30</p>
+      <p class="text-gray-700 mb-2">Teléfono: +56 9 75564584</p>
+      <p class="text-gray-700 mb-2">Correo Electrónico: farmaciaselsolltda@gmail.com</p>
+    </section>
+  </main>
+  <footer class="bg-blue-900 text-white py-8 mt-12">
+    <div class="container mx-auto text-center">
+      <p>© 2024 Farmacias El Sol. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
